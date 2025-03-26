@@ -3,6 +3,8 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
 import Sidebar from "./components/Sidebar";
+import CredentialsSignInPage from "./components/LoginPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -10,12 +12,16 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "issues",
-        element: <Sidebar />,
+        path: "login",
+        element: <CredentialsSignInPage />,
       },
       {
-        path: "/home",
-        element: <div>Home</div>,
+        path: "issues",
+        element: (
+          <ProtectedRoute>
+            <Sidebar />
+          </ProtectedRoute>
+        ),
       },
     ],
   },

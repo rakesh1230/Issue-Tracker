@@ -5,10 +5,19 @@ import { AppProvider, Navigation, Router } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { PageContainer } from "@toolpad/core/PageContainer";
 import Issues from "./Issue/issueList";
-import { Box } from "@mui/material";
+import { Box, Button, Tooltip } from "@mui/material";
 import Createissue from "./Issue/Createissue";
+import { useFrappeAuth } from "frappe-react-sdk";
+import { useNavigate } from "react-router-dom";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const Sidebar = (props: any) => {
+  const { logout } = useFrappeAuth();
+  const navigate = useNavigate();
+  const handelLogout = async () => {
+    navigate("/login");
+    await logout();
+  };
   const NAVIGATION: Navigation = [
     {
       segment: "dashboard",
@@ -16,6 +25,7 @@ const Sidebar = (props: any) => {
       icon: <DashboardIcon />,
     },
   ];
+
   function useRouter(initialPath: string): Router {
     const [pathname, setPathname] = useState(initialPath);
 
@@ -43,10 +53,9 @@ const Sidebar = (props: any) => {
       },
     },
   });
+
   const { window } = props;
-
   const router = useRouter("/dashboard");
-
   const Window = window ? window() : undefined;
 
   return (
@@ -57,6 +66,17 @@ const Sidebar = (props: any) => {
       window={Window}
     >
       <DashboardLayout>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>
+          <Tooltip title="logout">
+            <Button
+              sx={{ textTransform: "none" }}
+              variant="contained"
+              className="btn btn-danger"
+              onClick={handelLogout}
+              startIcon={<LogoutIcon />}
+            ></Button>
+          </Tooltip>
+        </Box>
         <PageContainer>
           <Box>
             <Createissue />
